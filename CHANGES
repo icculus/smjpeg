@@ -1,5 +1,7 @@
 
 0.2.2:
+Sam Lantinga - Wed Aug  9 23:30:39 PDT 2000
+ * The library now almost cross-compiles as a Windows DLL
 Mathias Hasselmann - Sat, 22 Apr 2000 23:30:35 +0200
  * Fixes for cross-compiling to Win32 using Mingw32
 Sam Lantinga - Tue Apr 11 16:17:03 PDT 2000
