@@ -1,0 +1,67 @@
+This file documents the simple animation format used by SMJPEG
+This is for static animation files, not for audio/video streaming.
+
+All 32-bit and 16-bit values are stored in big-endian format.
+
+8 bytes magic - "^@\nSMJPEG"
+Uint32 version = 0
+Uint32 length of clip in milliseconds
+
+One or more optional comment headers:
+4 bytes magic - "_TXT"
+Uint32 text length
+arbitrary text
+
+Optional audio header:
+4 bytes magic - "_SND"
+Uint32 audio header length
+Uint16 audio rate
+Uint8  bits-per-sample  (8 = unsigned 8-bit audio, 16 = signed 16-bit LE audio)
+Uint8  channels         (1 = mono, 2 = stereo)
+4 bytes audio encoding  ("NONE" = none, "APCM" = ADPCM compressed)
+
+Optional video header:
+4 bytes magic - "_VID"
+Uint32 video header length
+Uint32 number of frames
+Uint16 width
+Uint16 height
+4 bytes video encoding  ("JFIF" = jpeg)
+
+End of header marker:
+4 bytes magic - "HEND"
+
+Interleaved chunks of audio/video data:
+4 bytes magic - "sndD" for sound data, "vidD" for video data
+Uint32 millisecond timestamp
+Uint32 chunk length   
+
+// Comment -
+A single video chunk corresponds to a single frame of video.
+A single audio chunk corresponds to audio data not more than 4K uncompressed.
+(decoders may silently truncate chunks that contain more than 4K of
+ audio data, though a robust implementation would accept them.)
+
+// Comment -
+The audio/video chunks should be more-or-less ordered according to timestamp
+so seeking by time works correctly.  Audio chunks should be ordered before 
+video chunks, and all audio chunks for a given frame of video should be 
+grouped together.  This results in good playback when scanning linearly.
+i.e. AAAV-AAV-AAAV-... (A = audio chunk, V = video chunk)
+
+// Comment -
+The audio chunks should be encoded one frame ahead of the video chunks
+(i.e. current frame + next frame) so that if the decoder gets behind,
+the audio is queued up and doesn't underflow.  The decoder will quickly
+skip the next video frame and catch up.
+
+// Comment -
+The ADPCM audio encoded chunk consists of:
+Uint16 valprev
+Uint8 index
+Uint8 unused
+... compressed audio data
+
+End of data marker:       
+4 bytes magic - "DONE"
+
