@@ -1,321 +1,356 @@
-# Generated automatically from makefile.cfg by configure.
-# Makefile for Independent JPEG Group's software
+# Generated automatically from Makefile.in by configure.
+# Makefile.in generated automatically by automake 1.4 from Makefile.am
 
-# makefile.cfg is edited by configure to produce a custom Makefile.
+# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# This Makefile.in is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
 
-# Read installation instructions before saying "make" !!
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
 
-# For compiling with source and object files in different directories.
+
+SHELL = /bin/sh
+
 srcdir = .
-
-# Where to install the programs and man pages.
+top_srcdir = ..
 prefix = /usr/local
 exec_prefix = ${prefix}
-bindir = $(exec_prefix)/bin
-libdir = $(exec_prefix)/lib
-includedir = $(prefix)/include
-binprefix =
-manprefix =
-manext = 1
-mandir = $(prefix)/man/man$(manext)
 
-# The name of your C compiler:
-CC= gcc
+bindir = ${exec_prefix}/bin
+sbindir = ${exec_prefix}/sbin
+libexecdir = ${exec_prefix}/libexec
+datadir = ${prefix}/share
+sysconfdir = ${prefix}/etc
+sharedstatedir = ${prefix}/com
+localstatedir = ${prefix}/var
+libdir = ${exec_prefix}/lib
+infodir = ${prefix}/info
+mandir = ${prefix}/man
+includedir = ${prefix}/include
+oldincludedir = /usr/include
 
-# You may need to adjust these cc options:
-#CFLAGS= -O2 -funroll-loops -fomit-frame-pointer -I$(srcdir)
-CFLAGS= -O2 -funroll-loops -I$(srcdir)
-#CFLAGS= -g  -I$(srcdir)
-# Generally, we recommend defining any configuration symbols in jconfig.h,
-# NOT via -D switches here.
-# However, any special defines for ansi2knr.c may be included here:
-ANSI2KNRFLAGS= 
+DESTDIR =
 
-# Link-time cc options:
-LDFLAGS= 
+pkgdatadir = $(datadir)/smjpeg
+pkglibdir = $(libdir)/smjpeg
+pkgincludedir = $(includedir)/smjpeg
 
-# To link any special libraries, add the necessary -l commands here.
-LDLIBS= 
+top_builddir = ..
 
-# If using GNU libtool, LIBTOOL references it; if not, LIBTOOL is empty.
-LIBTOOL = 
-# $(O) expands to "lo" if using libtool, plain "o" if not.
-# Similarly, $(A) expands to "la" or "a".
-O = o
-A = a
+ACLOCAL = aclocal
+AUTOCONF = autoconf
+AUTOMAKE = automake
+AUTOHEADER = autoheader
 
-# Library version ID; libtool uses this for the shared library version number.
-# Note: we suggest this match the macro of the same name in jpeglib.h.
-JPEG_LIB_VERSION = 62
+INSTALL = /usr/bin/install -c
+INSTALL_PROGRAM = ${INSTALL} $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_DATA = ${INSTALL} -m 644
+INSTALL_SCRIPT = ${INSTALL_PROGRAM}
+transform = s,x,x,
 
-# Put here the object file name for the correct system-dependent memory
-# manager file.  For Unix this is usually jmemnobs.o, but you may want
-# to use jmemansi.o or jmemname.o if you have limited swap space.
-SYSDEPMEM= jmemnobs.$(O)
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
+host_alias = i686-pc-linux-gnu
+host_triplet = i686-pc-linux-gnu
+AS = @AS@
+BINARY_AGE = 0
+CC = gcc
+DLLTOOL = @DLLTOOL@
+INTERFACE_AGE = 0
+LD = /usr/bin/ld
+LIBTOOL = $(SHELL) $(top_builddir)/libtool
+LN_S = ln -s
+LT_AGE = 0
+LT_CURRENT = 0
+LT_RELEASE = 0.2
+LT_REVISION = 0
+MAJOR_VERSION = 0
+MAKEINFO = makeinfo
+MICRO_VERSION = 0
+MINOR_VERSION = 2
+NM = /usr/bin/nm -B
+OBJDUMP = @OBJDUMP@
+PACKAGE = smjpeg
+RANLIB = ranlib
+SDL_CFLAGS = -I/usr/local/include -I/usr/local/include/SDL -D_REENTRANT
+SDL_CONFIG = /usr/local/bin/sdl-config
+SDL_LIBS = -L/usr/local/lib -lSDL -lpthread
+VERSION = 0.2.0
 
-# miscellaneous OS-dependent stuff
-SHELL= /bin/sh
-# linker
-LN= $(CC)
-# file deletion command
-RM= rm -f
-# directory creation command
-MKDIR= mkdir
-# library (.a) file creation command
-AR= ar rc
-# second step in .a creation (use "touch" if not needed)
-AR2= ranlib
-# installation program
-INSTALL= /usr/bin/install -c
-INSTALL_PROGRAM= ${INSTALL}
-INSTALL_LIB= ${INSTALL} -m 644
-INSTALL_DATA= ${INSTALL} -m 644
+noinst_LTLIBRARIES = libjpeg.la
 
-# End of configurable options.
-
-
-# source files: JPEG library proper
-LIBSOURCES= jcapimin.c jcapistd.c jccoefct.c jccolor.c jcdctmgr.c jchuff.c \
-        jcinit.c jcmainct.c jcmarker.c jcmaster.c jcomapi.c jcparam.c \
-        jcphuff.c jcprepct.c jcsample.c jctrans.c jdapimin.c jdapistd.c \
-        jdatadst.c jdatasrc.c jdcoefct.c jdcolor.c jddctmgr.c jdhuff.c \
-        jdinput.c jdmainct.c jdmarker.c jdmaster.c jdmerge.c jdphuff.c \
-        jdpostct.c jdsample.c jdtrans.c jerror.c jfdctflt.c jfdctfst.c \
-        jfdctint.c jidctflt.c jidctfst.c jidctint.c jidctred.c jquant1.c \
-        jquant2.c jutils.c jmemmgr.c
-# memmgr back ends: compile only one of these into a working library
-SYSDEPSOURCES= jmemansi.c jmemname.c jmemnobs.c jmemdos.c jmemmac.c
-# source files: cjpeg/djpeg/jpegtran applications, also rdjpgcom/wrjpgcom
-APPSOURCES= cjpeg.c djpeg.c jpegtran.c rdjpgcom.c wrjpgcom.c cdjpeg.c \
-        rdcolmap.c rdswitch.c transupp.c rdppm.c wrppm.c rdgif.c wrgif.c \
-        rdtarga.c wrtarga.c rdbmp.c wrbmp.c rdrle.c wrrle.c
-SOURCES= $(LIBSOURCES) $(SYSDEPSOURCES) $(APPSOURCES)
-# files included by source files
-INCLUDES= jchuff.h jdhuff.h jdct.h jerror.h jinclude.h jmemsys.h jmorecfg.h \
-        jpegint.h jpeglib.h jversion.h cdjpeg.h cderror.h transupp.h
-# documentation, test, and support files
-DOCS= README install.doc usage.doc cjpeg.1 djpeg.1 jpegtran.1 rdjpgcom.1 \
-        wrjpgcom.1 wizard.doc example.c libjpeg.doc structure.doc \
-        coderules.doc filelist.doc change.log
-MKFILES= configure makefile.cfg makefile.ansi makefile.unix makefile.bcc \
-        makefile.mc6 makefile.dj makefile.wat makefile.vc makelib.ds \
-        makeapps.ds makeproj.mac makcjpeg.st makdjpeg.st makljpeg.st \
-        maktjpeg.st makefile.manx makefile.sas makefile.mms makefile.vms \
-        makvms.opt
-CONFIGFILES= jconfig.cfg jconfig.bcc jconfig.mc6 jconfig.dj jconfig.wat \
-        jconfig.vc jconfig.mac jconfig.st jconfig.manx jconfig.sas \
-        jconfig.vms
-CONFIGUREFILES= config.guess config.sub install-sh ltconfig ltmain.sh
-OTHERFILES= jconfig.doc ckconfig.c ansi2knr.c ansi2knr.1 jmemdosa.asm
-TESTFILES= testorig.jpg testimg.ppm testimg.bmp testimg.jpg testprog.jpg \
-        testimgp.jpg
-DISTFILES= $(DOCS) $(MKFILES) $(CONFIGFILES) $(SOURCES) $(INCLUDES) \
-        $(CONFIGUREFILES) $(OTHERFILES) $(TESTFILES)
-# library object files common to compression and decompression
-COMOBJECTS= jcomapi.$(O) jutils.$(O) jerror.$(O) jmemmgr.$(O) $(SYSDEPMEM)
-# compression library object files
-CLIBOBJECTS= jcapimin.$(O) jcapistd.$(O) jctrans.$(O) jcparam.$(O) \
-        jdatadst.$(O) jcinit.$(O) jcmaster.$(O) jcmarker.$(O) jcmainct.$(O) \
-        jcprepct.$(O) jccoefct.$(O) jccolor.$(O) jcsample.$(O) jchuff.$(O) \
-        jcphuff.$(O) jcdctmgr.$(O) jfdctfst.$(O) jfdctflt.$(O) \
-        jfdctint.$(O)
-# decompression library object files
-DLIBOBJECTS= jdapimin.$(O) jdapistd.$(O) jdtrans.$(O) jdatasrc.$(O) \
-        jdmaster.$(O) jdinput.$(O) jdmarker.$(O) jdhuff.$(O) jdphuff.$(O) \
-        jdmainct.$(O) jdcoefct.$(O) jdpostct.$(O) jddctmgr.$(O) \
-        jidctfst.$(O) jidctflt.$(O) jidctint.$(O) jidctred.$(O) \
-        jdsample.$(O) jdcolor.$(O) jquant1.$(O) jquant2.$(O) jdmerge.$(O)
-# These objectfiles are included in libjpeg.a
-LIBOBJECTS= $(CLIBOBJECTS) $(DLIBOBJECTS) $(COMOBJECTS)
-# object files for sample applications (excluding library files)
-COBJECTS= cjpeg.$(O) rdppm.$(O) rdgif.$(O) rdtarga.$(O) rdrle.$(O) \
-        rdbmp.$(O) rdswitch.$(O) cdjpeg.$(O)
-DOBJECTS= djpeg.$(O) wrppm.$(O) wrgif.$(O) wrtarga.$(O) wrrle.$(O) \
-        wrbmp.$(O) rdcolmap.$(O) cdjpeg.$(O)
-TROBJECTS= jpegtran.$(O) rdswitch.$(O) cdjpeg.$(O) transupp.$(O)
+libjpeg_la_SOURCES =  	jcapimin.c			jcapistd.c			jctrans.c			jcparam.c			jdatadst.c			jcinit.c			jcmaster.c			jcmarker.c			jcmainct.c			jcprepct.c			jccoefct.c			jccolor.c			jcsample.c			jchuff.c			jcphuff.c			jcdctmgr.c			jfdctfst.c			jfdctflt.c			jfdctint.c			jdapimin.c			jdapistd.c			jdtrans.c			jdatasrc.c			jdmaster.c			jdinput.c			jdmarker.c			jdhuff.c			jdphuff.c			jdmainct.c			jdcoefct.c			jdpostct.c			jddctmgr.c			jidctfst.c			jidctflt.c			jidctint.c			jidctred.c			jdsample.c			jdcolor.c			jquant1.c			jquant2.c			jdmerge.c			jcomapi.c			jutils.c			jerror.c			jmemmgr.c			jmemnobs.c			jchuff.h			jconfig.h			jdct.h				jdhuff.h			jerror.h			jinclude.h			jmemsys.h			jmorecfg.h			jpegint.h			jpeglib.h			jversion.h
 
 
-all:  libjpeg.$(A) cjpeg djpeg jpegtran rdjpgcom wrjpgcom
+EXTRA_DIST =  	libjpeg.doc
 
-# Special compilation rules to support ansi2knr and libtool.
-.SUFFIXES: .lo .la
-
-# How to compile with libtool.
-# .c.lo:
-# 	$(LIBTOOL) --mode=compile $(CC) $(CFLAGS) -c $(srcdir)/$*.c
-
-# How to use ansi2knr, when not using libtool.
-# .c.o:
-# 	./ansi2knr $(srcdir)/$*.c knr/$*.c
-# 	$(CC) $(CFLAGS) -c knr/$*.c
-# 	$(RM) knr/$*.c
-
-# How to use ansi2knr AND libtool.
-# .c.lo:
-# 	./ansi2knr $(srcdir)/$*.c knr/$*.c
-# 	$(LIBTOOL) --mode=compile $(CC) $(CFLAGS) -c knr/$*.c
-# 	$(RM) knr/$*.c
-
-ansi2knr: ansi2knr.c
-	$(CC) $(CFLAGS) $(ANSI2KNRFLAGS) -o ansi2knr $(srcdir)/ansi2knr.c
-	$(MKDIR) knr
-
-# the library:
-
-# without libtool:
-libjpeg.a:  $(LIBOBJECTS)
-	$(RM) libjpeg.a
-	$(AR) libjpeg.a  $(LIBOBJECTS)
-	$(AR2) libjpeg.a
-
-# with libtool:
-libjpeg.la:  $(LIBOBJECTS)
-	$(LIBTOOL) --mode=link $(CC) -o libjpeg.la $(LIBOBJECTS) \
-		-rpath $(libdir) -version-info $(JPEG_LIB_VERSION)
-
-# sample programs:
-
-cjpeg: $(COBJECTS) libjpeg.$(A)
-	$(LN) $(LDFLAGS) -o cjpeg $(COBJECTS) libjpeg.$(A) $(LDLIBS)
-
-djpeg: $(DOBJECTS) libjpeg.$(A)
-	$(LN) $(LDFLAGS) -o djpeg $(DOBJECTS) libjpeg.$(A) $(LDLIBS)
-
-jpegtran: $(TROBJECTS) libjpeg.$(A)
-	$(LN) $(LDFLAGS) -o jpegtran $(TROBJECTS) libjpeg.$(A) $(LDLIBS)
-
-rdjpgcom: rdjpgcom.$(O)
-	$(LN) $(LDFLAGS) -o rdjpgcom rdjpgcom.$(O) $(LDLIBS)
-
-wrjpgcom: wrjpgcom.$(O)
-	$(LN) $(LDFLAGS) -o wrjpgcom wrjpgcom.$(O) $(LDLIBS)
-
-# Installation rules:
-
-install: cjpeg djpeg jpegtran rdjpgcom wrjpgcom 
-	$(INSTALL_PROGRAM) cjpeg $(bindir)/$(binprefix)cjpeg
-	$(INSTALL_PROGRAM) djpeg $(bindir)/$(binprefix)djpeg
-	$(INSTALL_PROGRAM) jpegtran $(bindir)/$(binprefix)jpegtran
-	$(INSTALL_PROGRAM) rdjpgcom $(bindir)/$(binprefix)rdjpgcom
-	$(INSTALL_PROGRAM) wrjpgcom $(bindir)/$(binprefix)wrjpgcom
-	$(INSTALL_DATA) $(srcdir)/cjpeg.1 $(mandir)/$(manprefix)cjpeg.$(manext)
-	$(INSTALL_DATA) $(srcdir)/djpeg.1 $(mandir)/$(manprefix)djpeg.$(manext)
-	$(INSTALL_DATA) $(srcdir)/jpegtran.1 $(mandir)/$(manprefix)jpegtran.$(manext)
-	$(INSTALL_DATA) $(srcdir)/rdjpgcom.1 $(mandir)/$(manprefix)rdjpgcom.$(manext)
-	$(INSTALL_DATA) $(srcdir)/wrjpgcom.1 $(mandir)/$(manprefix)wrjpgcom.$(manext)
-
-install-lib: libjpeg.$(A) install-headers
-	$(INSTALL_LIB) libjpeg.$(A) $(libdir)/$(binprefix)libjpeg.$(A)
-
-install-headers: jconfig.h
-	$(INSTALL_DATA) jconfig.h $(includedir)/jconfig.h
-	$(INSTALL_DATA) $(srcdir)/jpeglib.h $(includedir)/jpeglib.h
-	$(INSTALL_DATA) $(srcdir)/jmorecfg.h $(includedir)/jmorecfg.h
-	$(INSTALL_DATA) $(srcdir)/jerror.h $(includedir)/jerror.h
-
-clean:
-	$(RM) *.o *.lo libjpeg.a libjpeg.la
-	$(RM) cjpeg djpeg jpegtran rdjpgcom wrjpgcom
-	$(RM) ansi2knr core testout* config.log config.status
-	$(RM) -r knr .libs _libs
-
-distclean: clean
-	$(RM) Makefile jconfig.h libtool config.cache
-
-test: cjpeg djpeg jpegtran
-	$(RM) testout*
-	./djpeg -dct int -ppm -outfile testout.ppm  $(srcdir)/testorig.jpg
-	./djpeg -dct int -bmp -colors 256 -outfile testout.bmp  $(srcdir)/testorig.jpg
-	./cjpeg -dct int -outfile testout.jpg  $(srcdir)/testimg.ppm
-	./djpeg -dct int -ppm -outfile testoutp.ppm $(srcdir)/testprog.jpg
-	./cjpeg -dct int -progressive -opt -outfile testoutp.jpg $(srcdir)/testimg.ppm
-	./jpegtran -outfile testoutt.jpg $(srcdir)/testprog.jpg
-	cmp $(srcdir)/testimg.ppm testout.ppm
-	cmp $(srcdir)/testimg.bmp testout.bmp
-	cmp $(srcdir)/testimg.jpg testout.jpg
-	cmp $(srcdir)/testimg.ppm testoutp.ppm
-	cmp $(srcdir)/testimgp.jpg testoutp.jpg
-	cmp $(srcdir)/testorig.jpg testoutt.jpg
-
-check: test
-
-# Mistake catcher:
-
-jconfig.h: jconfig.doc
-	echo You must prepare a system-dependent jconfig.h file.
-	echo Please read the installation directions in install.doc.
-	exit 1
-
-# GNU Make likes to know which target names are not really files to be made:
-.PHONY: all install install-lib install-headers clean distclean test check
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_CLEAN_FILES = 
+LTLIBRARIES =  $(noinst_LTLIBRARIES)
 
 
-jcapimin.$(O): jcapimin.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jcapistd.$(O): jcapistd.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jccoefct.$(O): jccoefct.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jccolor.$(O): jccolor.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jcdctmgr.$(O): jcdctmgr.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jdct.h
-jchuff.$(O): jchuff.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jchuff.h
-jcinit.$(O): jcinit.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jcmainct.$(O): jcmainct.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jcmarker.$(O): jcmarker.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jcmaster.$(O): jcmaster.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jcomapi.$(O): jcomapi.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jcparam.$(O): jcparam.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jcphuff.$(O): jcphuff.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jchuff.h
-jcprepct.$(O): jcprepct.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jcsample.$(O): jcsample.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jctrans.$(O): jctrans.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jdapimin.$(O): jdapimin.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jdapistd.$(O): jdapistd.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jdatadst.$(O): jdatadst.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jerror.h
-jdatasrc.$(O): jdatasrc.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jerror.h
-jdcoefct.$(O): jdcoefct.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jdcolor.$(O): jdcolor.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jddctmgr.$(O): jddctmgr.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jdct.h
-jdhuff.$(O): jdhuff.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jdhuff.h
-jdinput.$(O): jdinput.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jdmainct.$(O): jdmainct.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jdmarker.$(O): jdmarker.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jdmaster.$(O): jdmaster.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jdmerge.$(O): jdmerge.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jdphuff.$(O): jdphuff.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jdhuff.h
-jdpostct.$(O): jdpostct.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jdsample.$(O): jdsample.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jdtrans.$(O): jdtrans.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jerror.$(O): jerror.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jversion.h jerror.h
-jfdctflt.$(O): jfdctflt.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jdct.h
-jfdctfst.$(O): jfdctfst.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jdct.h
-jfdctint.$(O): jfdctint.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jdct.h
-jidctflt.$(O): jidctflt.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jdct.h
-jidctfst.$(O): jidctfst.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jdct.h
-jidctint.$(O): jidctint.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jdct.h
-jidctred.$(O): jidctred.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jdct.h
-jquant1.$(O): jquant1.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jquant2.$(O): jquant2.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jutils.$(O): jutils.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h
-jmemmgr.$(O): jmemmgr.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jmemsys.h
-jmemansi.$(O): jmemansi.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jmemsys.h
-jmemname.$(O): jmemname.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jmemsys.h
-jmemnobs.$(O): jmemnobs.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jmemsys.h
-jmemdos.$(O): jmemdos.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jmemsys.h
-jmemmac.$(O): jmemmac.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h jmemsys.h
-cjpeg.$(O): cjpeg.c cdjpeg.h jinclude.h jconfig.h jpeglib.h jmorecfg.h jerror.h cderror.h jversion.h
-djpeg.$(O): djpeg.c cdjpeg.h jinclude.h jconfig.h jpeglib.h jmorecfg.h jerror.h cderror.h jversion.h
-jpegtran.$(O): jpegtran.c cdjpeg.h jinclude.h jconfig.h jpeglib.h jmorecfg.h jerror.h cderror.h transupp.h jversion.h
-rdjpgcom.$(O): rdjpgcom.c jinclude.h jconfig.h
-wrjpgcom.$(O): wrjpgcom.c jinclude.h jconfig.h
-cdjpeg.$(O): cdjpeg.c cdjpeg.h jinclude.h jconfig.h jpeglib.h jmorecfg.h jerror.h cderror.h
-rdcolmap.$(O): rdcolmap.c cdjpeg.h jinclude.h jconfig.h jpeglib.h jmorecfg.h jerror.h cderror.h
-rdswitch.$(O): rdswitch.c cdjpeg.h jinclude.h jconfig.h jpeglib.h jmorecfg.h jerror.h cderror.h
-transupp.$(O): transupp.c jinclude.h jconfig.h jpeglib.h jmorecfg.h jpegint.h jerror.h transupp.h
-rdppm.$(O): rdppm.c cdjpeg.h jinclude.h jconfig.h jpeglib.h jmorecfg.h jerror.h cderror.h
-wrppm.$(O): wrppm.c cdjpeg.h jinclude.h jconfig.h jpeglib.h jmorecfg.h jerror.h cderror.h
-rdgif.$(O): rdgif.c cdjpeg.h jinclude.h jconfig.h jpeglib.h jmorecfg.h jerror.h cderror.h
-wrgif.$(O): wrgif.c cdjpeg.h jinclude.h jconfig.h jpeglib.h jmorecfg.h jerror.h cderror.h
-rdtarga.$(O): rdtarga.c cdjpeg.h jinclude.h jconfig.h jpeglib.h jmorecfg.h jerror.h cderror.h
-wrtarga.$(O): wrtarga.c cdjpeg.h jinclude.h jconfig.h jpeglib.h jmorecfg.h jerror.h cderror.h
-rdbmp.$(O): rdbmp.c cdjpeg.h jinclude.h jconfig.h jpeglib.h jmorecfg.h jerror.h cderror.h
-wrbmp.$(O): wrbmp.c cdjpeg.h jinclude.h jconfig.h jpeglib.h jmorecfg.h jerror.h cderror.h
-rdrle.$(O): rdrle.c cdjpeg.h jinclude.h jconfig.h jpeglib.h jmorecfg.h jerror.h cderror.h
-wrrle.$(O): wrrle.c cdjpeg.h jinclude.h jconfig.h jpeglib.h jmorecfg.h jerror.h cderror.h
+DEFS =  -DPACKAGE=\"smjpeg\" -DVERSION=\"0.2.0\"  -I. -I$(srcdir) 
+CPPFLAGS = 
+LDFLAGS = 
+LIBS =  -L/usr/local/lib -lSDL -lpthread
+libjpeg_la_LDFLAGS = 
+libjpeg_la_LIBADD = 
+libjpeg_la_OBJECTS =  jcapimin.lo jcapistd.lo jctrans.lo jcparam.lo \
+jdatadst.lo jcinit.lo jcmaster.lo jcmarker.lo jcmainct.lo jcprepct.lo \
+jccoefct.lo jccolor.lo jcsample.lo jchuff.lo jcphuff.lo jcdctmgr.lo \
+jfdctfst.lo jfdctflt.lo jfdctint.lo jdapimin.lo jdapistd.lo jdtrans.lo \
+jdatasrc.lo jdmaster.lo jdinput.lo jdmarker.lo jdhuff.lo jdphuff.lo \
+jdmainct.lo jdcoefct.lo jdpostct.lo jddctmgr.lo jidctfst.lo jidctflt.lo \
+jidctint.lo jidctred.lo jdsample.lo jdcolor.lo jquant1.lo jquant2.lo \
+jdmerge.lo jcomapi.lo jutils.lo jerror.lo jmemmgr.lo jmemnobs.lo
+CFLAGS = -g -O2 -I/usr/local/include -I/usr/local/include/SDL -D_REENTRANT -I$(top_srcdir)/adpcm -I$(top_srcdir)/jpeg-6b
+COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+DIST_COMMON =  README Makefile.am Makefile.in ansi2knr.1 ansi2knr.c \
+config.guess config.sub configure install-sh ltconfig ltmain.sh
+
+
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
+
+TAR = gtar
+GZIP_ENV = --best
+DEP_FILES =  .deps/jcapimin.P .deps/jcapistd.P .deps/jccoefct.P \
+.deps/jccolor.P .deps/jcdctmgr.P .deps/jchuff.P .deps/jcinit.P \
+.deps/jcmainct.P .deps/jcmarker.P .deps/jcmaster.P .deps/jcomapi.P \
+.deps/jcparam.P .deps/jcphuff.P .deps/jcprepct.P .deps/jcsample.P \
+.deps/jctrans.P .deps/jdapimin.P .deps/jdapistd.P .deps/jdatadst.P \
+.deps/jdatasrc.P .deps/jdcoefct.P .deps/jdcolor.P .deps/jddctmgr.P \
+.deps/jdhuff.P .deps/jdinput.P .deps/jdmainct.P .deps/jdmarker.P \
+.deps/jdmaster.P .deps/jdmerge.P .deps/jdphuff.P .deps/jdpostct.P \
+.deps/jdsample.P .deps/jdtrans.P .deps/jerror.P .deps/jfdctflt.P \
+.deps/jfdctfst.P .deps/jfdctint.P .deps/jidctflt.P .deps/jidctfst.P \
+.deps/jidctint.P .deps/jidctred.P .deps/jmemmgr.P .deps/jmemnobs.P \
+.deps/jquant1.P .deps/jquant2.P .deps/jutils.P
+SOURCES = $(libjpeg_la_SOURCES)
+OBJECTS = $(libjpeg_la_OBJECTS)
+
+all: all-redirect
+.SUFFIXES:
+.SUFFIXES: .S .c .lo .o .s
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOMAKE) --foreign jpeg-6b/Makefile
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+
+mostlyclean-noinstLTLIBRARIES:
+
+clean-noinstLTLIBRARIES:
+	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
+
+distclean-noinstLTLIBRARIES:
+
+maintainer-clean-noinstLTLIBRARIES:
+
+.s.o:
+	$(COMPILE) -c $<
+
+.S.o:
+	$(COMPILE) -c $<
+
+mostlyclean-compile:
+	-rm -f *.o core *.core
+
+clean-compile:
+
+distclean-compile:
+	-rm -f *.tab.c
+
+maintainer-clean-compile:
+
+.s.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+.S.lo:
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
+
+mostlyclean-libtool:
+	-rm -f *.lo
+
+clean-libtool:
+	-rm -rf .libs _libs
+
+distclean-libtool:
+
+maintainer-clean-libtool:
+
+libjpeg.la: $(libjpeg_la_OBJECTS) $(libjpeg_la_DEPENDENCIES)
+	$(LINK)  $(libjpeg_la_LDFLAGS) $(libjpeg_la_OBJECTS) $(libjpeg_la_LIBADD) $(LIBS)
+
+tags: TAGS
+
+ID: $(HEADERS) $(SOURCES) $(LISP)
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	here=`pwd` && cd $(srcdir) \
+	  && mkid -f$$here/ID $$unique $(LISP)
+
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
+	tags=; \
+	here=`pwd`; \
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
+	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
+
+mostlyclean-tags:
+
+clean-tags:
+
+distclean-tags:
+	-rm -f TAGS ID
+
+maintainer-clean-tags:
+
+distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+
+subdir = jpeg-6b
+
+distdir: $(DISTFILES)
+	here=`cd $(top_builddir) && pwd`; \
+	top_distdir=`cd $(top_distdir) && pwd`; \
+	distdir=`cd $(distdir) && pwd`; \
+	cd $(top_srcdir) \
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --foreign jpeg-6b/Makefile
+	@for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  if test -d $$d/$$file; then \
+	    cp -pr $$/$$file $(distdir)/$$file; \
+	  else \
+	    test -f $(distdir)/$$file \
+	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	  fi; \
+	done
+
+DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
+
+-include $(DEP_FILES)
+
+mostlyclean-depend:
+
+clean-depend:
+
+distclean-depend:
+	-rm -rf .deps
+
+maintainer-clean-depend:
+
+%.o: %.c
+	@echo '$(COMPILE) -c $<'; \
+	$(COMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
+	@-cp .deps/$(*F).pp .deps/$(*F).P; \
+	tr ' ' '\012' < .deps/$(*F).pp \
+	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
+	    >> .deps/$(*F).P; \
+	rm .deps/$(*F).pp
+
+%.lo: %.c
+	@echo '$(LTCOMPILE) -c $<'; \
+	$(LTCOMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
+	@-sed -e 's/^\([^:]*\)\.o[ 	]*:/\1.lo \1.o :/' \
+	  < .deps/$(*F).pp > .deps/$(*F).P; \
+	tr ' ' '\012' < .deps/$(*F).pp \
+	  | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
+	    >> .deps/$(*F).P; \
+	rm -f .deps/$(*F).pp
+info-am:
+info: info-am
+dvi-am:
+dvi: dvi-am
+check-am: all-am
+check: check-am
+installcheck-am:
+installcheck: installcheck-am
+install-exec-am:
+install-exec: install-exec-am
+
+install-data-am:
+install-data: install-data-am
+
+install-am: all-am
+	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
+install: install-am
+uninstall-am:
+uninstall: uninstall-am
+all-am: Makefile $(LTLIBRARIES)
+all-redirect: all-am
+install-strip:
+	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
+installdirs:
+
+
+mostlyclean-generic:
+
+clean-generic:
+
+distclean-generic:
+	-rm -f Makefile $(CONFIG_CLEAN_FILES)
+	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+
+maintainer-clean-generic:
+mostlyclean-am:  mostlyclean-noinstLTLIBRARIES mostlyclean-compile \
+		mostlyclean-libtool mostlyclean-tags mostlyclean-depend \
+		mostlyclean-generic
+
+mostlyclean: mostlyclean-am
+
+clean-am:  clean-noinstLTLIBRARIES clean-compile clean-libtool \
+		clean-tags clean-depend clean-generic mostlyclean-am
+
+clean: clean-am
+
+distclean-am:  distclean-noinstLTLIBRARIES distclean-compile \
+		distclean-libtool distclean-tags distclean-depend \
+		distclean-generic clean-am
+	-rm -f libtool
+
+distclean: distclean-am
+
+maintainer-clean-am:  maintainer-clean-noinstLTLIBRARIES \
+		maintainer-clean-compile maintainer-clean-libtool \
+		maintainer-clean-tags maintainer-clean-depend \
+		maintainer-clean-generic distclean-am
+	@echo "This command is intended for maintainers to use;"
+	@echo "it deletes files that may require special tools to rebuild."
+
+maintainer-clean: maintainer-clean-am
+
+.PHONY: mostlyclean-noinstLTLIBRARIES distclean-noinstLTLIBRARIES \
+clean-noinstLTLIBRARIES maintainer-clean-noinstLTLIBRARIES \
+mostlyclean-compile distclean-compile clean-compile \
+maintainer-clean-compile mostlyclean-libtool distclean-libtool \
+clean-libtool maintainer-clean-libtool tags mostlyclean-tags \
+distclean-tags clean-tags maintainer-clean-tags distdir \
+mostlyclean-depend distclean-depend clean-depend \
+maintainer-clean-depend info-am info dvi-am dvi check check-am \
+installcheck-am installcheck install-exec-am install-exec \
+install-data-am install-data install-am install uninstall-am uninstall \
+all-redirect all-am all installdirs mostlyclean-generic \
+distclean-generic clean-generic maintainer-clean-generic clean \
+mostlyclean distclean maintainer-clean
+
+
+# Tell versions [3.59,3.63) of GNU make to not export all variables.
+# Otherwise a system limit (for SysV at least) may be exceeded.
+.NOEXPORT:

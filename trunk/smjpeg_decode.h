@@ -5,7 +5,7 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include <jpeglib.h>
-#include <SDL/SDL.h>
+#include "SDL.h"
 
 #define SMJPEG_AUDIO_BUFFERS    32
 #define SMJPEG_AUDIO_MAX_CHUNK  4096
