@@ -570,13 +570,13 @@ static int ParseVideo(SMJPEG *movie)
     return(BLOCK_PLAYED);
 }
 
-static int ParseBlock(SMJPEG *movie, int do_wait)
+static int ParseBlock(SMJPEG *movie, int do_wait, Uint32 timestamp)
 {
     const int TIMESLICE = 10;       /* OS timeslice, in milliseconds */
     Uint8 magic[4];
     Uint32 min_timestamp;
     Uint32 max_timestamp;
-    Sint32 timenow;
+    Uint32 timenow = timestamp - movie->start;
 
     /* Read this chunk type */
     if ( !fread(magic,4,1,movie->src) || MAGIC_EQUALS(magic,DATA_END_MAGIC) ) {
@@ -597,7 +597,7 @@ static int ParseBlock(SMJPEG *movie, int do_wait)
     //READ32(max_timestamp, movie->src);
     max_timestamp = min_timestamp+90;
     if ( movie->use_timing ) {
-        timenow = SDL_GetTicks() - movie->start;
+        //timenow = SDL_GetTicks() - movie->start;
 
 #ifdef DEBUG_TIMING
 //printf("Time now: %d, timestamp: %d\n", timenow, min_timestamp);
@@ -646,9 +646,10 @@ printf("Sleeping for %d milliseconds\n", timediff);
 int SMJPEG_advance(SMJPEG *movie, int num_frames, int do_wait)
 {
     int status;
+    Uint32 timestamp = SDL_GetTicks();
 
     while ( num_frames && !movie->at_end ) {
-        status = ParseBlock(movie, do_wait);
+        status = ParseBlock(movie, do_wait, timestamp);
         switch (status) {
             case BLOCK_PLAYED:
                 --num_frames;
