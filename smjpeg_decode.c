@@ -8,7 +8,6 @@
 #include "adpcm.h"
 #include "smjpeg_file.h"
 #include "smjpeg_decode.h"
-#include "SDL_opengl.h"
 
 #ifdef __MINGW32__
 #warning mingw32 detected, replacing vsnprintf by vsprintf...
