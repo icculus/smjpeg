@@ -129,6 +129,10 @@ void SMJPEG_free(SMJPEG *movie)
         fclose(movie->src);
         movie->src = NULL;
     }
+    if ( movie->video.target_rows ) {
+        free(movie->video.target_rows);
+        movie->video.target_rows = NULL;
+    }
 }
 
 int SMJPEG_load(SMJPEG *movie, const char *file)
