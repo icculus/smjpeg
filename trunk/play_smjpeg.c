@@ -15,7 +15,7 @@
 
 void Usage(const char *argv0)
 {
-    printf("SMJPEG 0.1 decoder, Loki Entertainment Software\n");
+    printf("SMJPEG " VERSION " decoder, Loki Entertainment Software\n");
     printf("Usage: %s [-2] [-l] file.mjpg [file.mjpg ...]\n", argv0);
 }
 

@@ -1,6 +1,6 @@
 
 0.2.0 -
-SOL	Fully autoconf'd
+SOL	Fully autoconf'd, updated for SDL 1.0
 SOL	Added -c option to encoder to specify number of audio channels
 SOL	Added -l option to decoder to specify looping playback
 SOL Added SMJPEG_getposition() and SMJPEG_setposition() hacks

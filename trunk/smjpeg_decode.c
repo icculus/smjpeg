@@ -3,6 +3,7 @@
 
 #include <errno.h>
 #include <stdarg.h>
+#include <string.h>
 
 #include "adpcm.h"
 #include "smjpeg_file.h"
