@@ -1,5 +1,7 @@
 
 0.2.2:
+Mathias Hasselmann - Sat, 22 Apr 2000 23:30:35 +0200
+ * Fixes for cross-compiling to Win32 using Mingw32
 Sam Lantinga - Tue Apr 11 16:17:03 PDT 2000
  * Fixed encoding of stereo audio (nobody caught this before? :)
 

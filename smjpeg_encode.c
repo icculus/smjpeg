@@ -42,7 +42,7 @@ int get_jpeg_dimensions(const char *file, Uint16 *w, Uint16 *h)
     int status;
 
     status = -1;
-    input = fopen(file, "r");
+    input = fopen(file, "rb");
     if ( input ) {
         struct jpeg_error_mgr errmgr;
         struct jpeg_decompress_struct cinfo;
@@ -217,7 +217,7 @@ int main(int argc, char *argv[])
     /* Check to see if there is any audio input */
     stat(audiofile, &sb);
     audio_left = sb.st_size;
-    audioinput = fopen(audiofile, "r");
+    audioinput = fopen(audiofile, "rb");
     if ( audioinput == NULL ) {
         fprintf(stderr, "Warning: no audio stream - video only\n");
     }
@@ -229,7 +229,7 @@ int main(int argc, char *argv[])
     }
 
     /* Open the output file */
-    output = fopen(outputfile, "w");
+    output = fopen(outputfile, "wb");
     if ( output == NULL ) {
         fprintf(stderr, "Unable to write output to %s\n", outputfile);
         exit(2);
