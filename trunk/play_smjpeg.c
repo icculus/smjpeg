@@ -94,7 +94,11 @@ int main(int argc, char *argv[])
                     spec.format = AUDIO_U8;
                     break;
                 case 16:
-                    spec.format = AUDIO_S16;
+#if SDL_BYTEORDER == SDL_LIL_ENDIAN
+                    spec.format = AUDIO_S16LSB;
+#else
+                    spec.format = AUDIO_S16MSB;
+#endif
                     break;
                 default:
                     /* Uh oh... */
