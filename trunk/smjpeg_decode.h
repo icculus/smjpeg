@@ -94,41 +94,41 @@ typedef struct SMJPEG {
 extern "C" {
 #endif
 
-extern int SMJPEG_load(SMJPEG *movie, const char *file);
+extern DECLSPEC int SMJPEG_load(SMJPEG *movie, const char *file);
 
-extern void SMJPEG_free(SMJPEG *movie);
+extern DECLSPEC void SMJPEG_free(SMJPEG *movie);
 
 /* Turn on or off pixel doubling for SMJPEG display.
    You must call SMJPEG_target() after you call this function.
  */
-extern void SMJPEG_double(SMJPEG *movie, int state);
+extern DECLSPEC void SMJPEG_double(SMJPEG *movie, int state);
 
 /* Set the target display for video playback of an SMJPEG video */
-extern int SMJPEG_target(SMJPEG *movie,
+extern DECLSPEC int SMJPEG_target(SMJPEG *movie,
        SDL_mutex *lock, int x, int y, SDL_Surface *target,
        void (*update)(SDL_Surface *, int, int, unsigned int, unsigned int));
 
 /* Seek to a particular offset in the MJPEG stream */
-extern int SMJPEG_seek(SMJPEG *movie, Uint32 ms);
+extern DECLSPEC int SMJPEG_seek(SMJPEG *movie, Uint32 ms);
 
 /* Functions for saving the current position and restoring it */
-extern Uint32 SMJPEG_getposition(SMJPEG *movie);
-extern void SMJPEG_setposition(SMJPEG *movie, Uint32 pos);
+extern DECLSPEC Uint32 SMJPEG_getposition(SMJPEG *movie);
+extern DECLSPEC void SMJPEG_setposition(SMJPEG *movie, Uint32 pos);
 
 /* Rewind to the start of an MJPEG stream */
-extern void SMJPEG_rewind(SMJPEG *movie);
+extern DECLSPEC void SMJPEG_rewind(SMJPEG *movie);
 
 /* Start the playback of a movie, optionally specifying time synchronization */
-extern void SMJPEG_start(SMJPEG *movie, int use_timing);
+extern DECLSPEC void SMJPEG_start(SMJPEG *movie, int use_timing);
 
 /* Advance the specified number of frames, or the whole movie if -1 */
-extern int SMJPEG_advance(SMJPEG *movie, int num_frames, int do_wait);
+extern DECLSPEC int SMJPEG_advance(SMJPEG *movie, int num_frames, int do_wait);
 
 /* Stop playback of a movie */
-extern void SMJPEG_stop(SMJPEG *movie);
+extern DECLSPEC void SMJPEG_stop(SMJPEG *movie);
 
 /* Function that can be passed to SDL as an audio callback */
-extern void SMJPEG_feedaudio(void *udata, Uint8 *stream, int len);
+extern DECLSPEC void SMJPEG_feedaudio(void *udata, Uint8 *stream, int len);
 
 #ifdef __cplusplus
 };

@@ -36,7 +36,11 @@ static void SMJPEG_status(SMJPEG *movie, int code, char *fmt, ...)
     movie->status.code = code;
     if ( fmt ) {
         va_start(ap, fmt);
+#ifdef WIN32
+        vsprintf(movie->status.message,fmt,ap);
+#else
         vsnprintf(movie->status.message,(sizeof movie->status.message),fmt,ap);
+#endif
         va_end(ap);
     } else {
         movie->status.message[0] = '\0';
