@@ -110,6 +110,10 @@ extern int SMJPEG_target(SMJPEG *movie,
 /* Seek to a particular offset in the MJPEG stream */
 extern int SMJPEG_seek(SMJPEG *movie, Uint32 ms);
 
+/* Functions for saving the current position and restoring it */
+extern Uint32 SMJPEG_getposition(SMJPEG *movie);
+extern void SMJPEG_setposition(SMJPEG *movie, Uint32 pos);
+
 /* Rewind to the start of an MJPEG stream */
 extern void SMJPEG_rewind(SMJPEG *movie);
 

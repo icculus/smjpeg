@@ -5,13 +5,10 @@ ADPCMDIR = adpcm
 
 OPTIMIZE = -O2 -funroll-loops
 CFLAGS = -g $(OPTIMIZE) -I$(JPEGDIR) -I$(ADPCMDIR)
-ifeq ($(static), true)
-CFLAGS += -D_SDL_STATIC_LIB
-endif
 
 LIBRARIES = $(JPEGDIR)/libjpeg.a $(ADPCMDIR)/libadpcm.a
 ifeq ($(static), true)
-SDLLIB = -lSDL-static -ldl -lpthread -lesd -L/usr/X11R6/lib -lX11 -lXext -lXxf86dga -lXxf86vm
+SDLLIB = -lSDL -ldl -lpthread -lesd -L/usr/X11R6/lib -lX11 -lXext -lXxf86dga -lXxf86vm
 else
 SDLLIB = -lSDL -ldl -lpthread -lesd
 endif

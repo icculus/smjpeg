@@ -135,7 +135,7 @@ int WriteVideoChunk(FILE *input, double timestamp, Uint32 size,
 void Usage(const char *argv0)
 {
     printf("SMJPEG 0.1 encoder, Loki Entertainment Software\n");
-    printf("Usage: %s [-r fps]\n", argv0);
+    printf("Usage: %s [-r fps] [-c channels]\n", argv0);
 }
 
 int main(int argc, char *argv[])
@@ -188,6 +188,10 @@ int main(int argc, char *argv[])
         if ( (strcmp(argv[index], "-r") == 0) && argv[index+1] ) {
             ++index;
             video_fps = atoi(argv[index]);
+        }
+        if ( (strcmp(argv[index], "-c") == 0) && argv[index+1] ) {
+            ++index;
+            audio_channels = atoi(argv[index]);
         }
     }
 

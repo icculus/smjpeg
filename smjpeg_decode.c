@@ -449,6 +449,17 @@ void SMJPEG_start(SMJPEG *movie, int use_timing)
     movie->at_end = 0;
 }
 
+/* Functions for saving the current position and restoring it */
+Uint32 SMJPEG_getposition(SMJPEG *movie)
+{
+    return ftell(movie->src);
+}
+void SMJPEG_setposition(SMJPEG *movie, Uint32 pos)
+{
+    fseek(movie->src, pos, SEEK_SET);
+    movie->at_end = 0;
+}
+
 static int SkipBlock(SMJPEG *movie, const char *magic)
 {
     Uint32 length;
