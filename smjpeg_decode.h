@@ -42,10 +42,13 @@ typedef struct SMJPEG {
             int read;
             int write;
             int used;
+            // Added by Joe
+//            SDL_mutux audio_buffer_mutex;
             struct {
                 int len;
                 Uint8 buf[SMJPEG_AUDIO_MAX_CHUNK];
             } ringbuf[SMJPEG_AUDIO_BUFFERS]; 
+            SDL_mutex *audio_mutex;
         } ring;
     } audio;
 

@@ -140,7 +140,8 @@ int WriteVideoChunk(FILE *input, double timestamp, Uint32 size,
 void Usage(const char *argv0)
 {
     printf("SMJPEG " VERSION " encoder, Loki Entertainment Software and Fat N Soft\n");
-    printf("Usage: %s [-r fps] [-c channels]\n", argv0);
+    printf("Usage: %s [-r fps] [-c channels] [-n input] [-1]\n", argv0);
+    printf("If no FPS is given it will calculate it based on the nubmer of video frames and length of audio\n");
 }
 
 int main(int argc, char *argv[])
@@ -170,6 +171,7 @@ int main(int argc, char *argv[])
     int status;
     int fps_set;
     void *audio_data;
+    char* input_names[256];
 
     /* First, set default encoding parameters */
     audio_rate = DEFAULT_AUDIO_RATE;
@@ -185,6 +187,7 @@ int main(int argc, char *argv[])
     strcpy(audiofile, DEFAULT_AUDIO_INPUT);
     strcpy(outputfile, DEFAULT_OUTPUT_FILE);
     fps_set = 0;
+    strcpy(input_names, "%d.jpg");    
 
     /* Process command-line options */
     for ( index=1; argv[index]; ++index ) {
@@ -195,31 +198,37 @@ int main(int argc, char *argv[])
         }
         if ( (strcmp(argv[index], "-r") == 0) && argv[index+1] ) {
             ++index;
-            video_fps = atof(argv[index]);
+            video_fps = atoi(argv[index]);
             fps_set = 1;
         }
         if ( (strcmp(argv[index], "-c") == 0) && argv[index+1] ) {
             ++index;
             audio_channels = atoi(argv[index]);
         }
+        if ( (strcmp(argv[index], "-n") == 0) && argv[index+1] )
+        {
+            index++;
+            strcpy(input_names, argv[index]);
+        }
+            
     }
 
     /* Count the number of jpeg frames */
-    index = 0;
+    index = 1;
     do {
-        sprintf(jpegfile, "%s%06d.jpg", jpegprefix, index++);
+        sprintf(jpegfile, input_names, index++);
         fprintf(stderr, "%s", jpegfile);
     } while ( access(jpegfile, R_OK) == 0 );
 
     /* Double check that we have some frames */
-    video_nframes = index - 1;
+    video_nframes = index - 2;
     if ( video_nframes == 0 ) {
         fprintf(stderr, "Warning: no video stream - audio only\n");
     }
 
     /* Get the width and height of the output movie */
     if ( video_nframes > 0 ) {
-        sprintf(jpegfile, "%s000000.jpg", jpegprefix);
+        sprintf(jpegfile, input_names, 1);
         get_jpeg_dimensions(jpegfile, &video_width, &video_height);
     }
 
@@ -308,7 +317,7 @@ int main(int argc, char *argv[])
     video_time = 0.0;
     ms_per_audio_frame = (1000.0 * DEFAULT_AUDIO_FRAME) / audio_rate;
     ms_per_video_frame = 1000.0 / video_fps;
-    for ( index=0; index<video_nframes; ++index ) {
+    for ( index=1; index <= video_nframes; ++index ) {
 
         /* Encode audio for this frame and one frame ahead */
         while ( audioinput && (audio_left > 0) &&
@@ -326,7 +335,7 @@ int main(int argc, char *argv[])
         }
 
         /* Encode the video for this frame */
-        sprintf(jpegfile, "%s%06d.jpg", jpegprefix, index);
+        sprintf(jpegfile, input_names, index);
         stat(jpegfile, &sb);
         video_framesize = sb.st_size;
         jpeginput = fopen(jpegfile, "rb");

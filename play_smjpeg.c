@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
     int doubleflag;
     int loopflag;
     int fullflag;
+    int bpp;
 
     if ( SDL_Init(SDL_INIT_AUDIO|SDL_INIT_VIDEO) < 0 ) {
         fprintf(stderr, "Couldn't init SDL: %s\n", SDL_GetError());
@@ -40,6 +41,7 @@ int main(int argc, char *argv[])
     doubleflag = 0;
     loopflag = 0;
     fullflag = 0;
+    bpp = 16;
     for ( i=1; argv[i]; ++i ) {
         if ( (strcmp(argv[i], "-h") == 0) ||
              (strcmp(argv[i], "--help") == 0) ) {
@@ -56,6 +58,11 @@ int main(int argc, char *argv[])
         }
         if ( strcmp(argv[i], "-f") == 0 ) {
             fullflag = SDL_FULLSCREEN;
+            continue;
+        }
+        if ( strcmp(argv[i], "-bpp") == 0 ) {
+            i ++;
+            bpp = atoi(argv[i]);
             continue;
         }
         if ( strcmp(argv[i], "-v") == 0 ) {
@@ -90,11 +97,17 @@ int main(int argc, char *argv[])
                 width *= 2;
                 height *= 2;
             }
-            screen = SDL_SetVideoMode(width, height, 16, SDL_SWSURFACE|fullflag);
+            screen = SDL_SetVideoMode(width, height, bpp, SDL_SWSURFACE|fullflag);
             if ( screen == NULL ) {
                 fprintf(stderr, "Couldn't set %dx%d 16-bit video mode: %s\n",
                                                             SDL_GetError());
                 continue;
+            }
+            if (bpp == 24)
+            {
+                screen->format->Rmask = 0xFF;
+                screen->format->Gmask = 0xFF00;
+                screen->format->Bmask = 0xFF0000;
             }
             SMJPEG_double(&movie, doubleflag);
             SMJPEG_target(&movie, NULL, 0, 0, screen, SDL_UpdateRect);

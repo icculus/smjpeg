@@ -25,7 +25,8 @@
 enum {
     EARLY_RETURN = -1,
     BLOCK_SKIPPED = 0,
-    BLOCK_PLAYED = 1
+    BLOCK_PLAYED = 1,
+    BLOCK_NOT_READY = 2
 };
 
 /* Function for setting the status of an SMJPEG stream */
@@ -143,6 +144,7 @@ void SMJPEG_free(SMJPEG *movie)
         free(movie->video.target_rows);
         movie->video.target_rows = NULL;
     }
+    SDL_DestroyMutex(movie->audio.ring.audio_mutex);
 }
 
 int SMJPEG_load(SMJPEG *movie, const char *file)
@@ -233,6 +235,8 @@ int SMJPEG_load(SMJPEG *movie, const char *file)
     /* Perform fast decoding */
     movie->jpeg_cinfo.dct_method = JDCT_FASTEST;
     movie->jpeg_cinfo.do_fancy_upsampling = FALSE;
+
+    movie->audio.ring.audio_mutex = SDL_CreateMutex();
 
     /* Successful header load! */
     return(0);
@@ -501,6 +505,7 @@ static int ParseAudio(SMJPEG *movie)
     struct dataring *ring;
     Uint32 length;
     Uint32 extra;
+    int loop = 0;
 
     /* Wait for a while if the audio buffer is full */
     ring = &movie->audio.ring;
@@ -509,11 +514,14 @@ static int ParseAudio(SMJPEG *movie)
 #ifdef DEBUG_TIMING
 printf("Waiting for audio queue to empty\n");
 #endif
+
         while ( (ring->used == SMJPEG_AUDIO_BUFFERS) && movie->audio.enabled ) {
-            SDL_Delay(10);
+            SDL_Delay(1);
         }
+
     }
 
+    SDL_mutexP(movie->audio.ring.audio_mutex);
     /* Copy audio data into ring buffer and increment */
     READ32(length, movie->src);
     if ( length > SMJPEG_AUDIO_MAX_CHUNK ) {
@@ -555,6 +563,7 @@ printf("Waiting for audio queue to empty\n");
     }
     ring->write = (ring->write+1)%SMJPEG_AUDIO_BUFFERS;
     ++ring->used;
+    SDL_mutexV(movie->audio.ring.audio_mutex);
 
     /* Seek past extra data, if we overflowed */
     if ( extra ) {
@@ -619,7 +628,7 @@ static int ParseBlock(SMJPEG *movie, int do_wait, Uint32 timestamp)
             if ( timenow < min_timestamp ) {
                 if ( do_wait ) {
                     int timediff = min_timestamp - (SDL_GetTicks() - movie->start);
-                    if ( timediff > TIMESLICE && timediff < 10000 ) {
+                    if ( timediff > TIMESLICE && timediff < 0xFFFFFF ) {
                         timediff -= TIMESLICE;
 #ifdef DEBUG_TIMING
 printf("Sleeping for %d milliseconds\n", timediff);
@@ -655,6 +664,7 @@ int SMJPEG_advance(SMJPEG *movie, int num_frames, int do_wait)
                 --num_frames;
                 break;
             case BLOCK_SKIPPED:
+            case BLOCK_NOT_READY:
                 break;
             case EARLY_RETURN:
                 num_frames = 0;
@@ -678,25 +688,43 @@ void SMJPEG_feedaudio(void *udata, Uint8 *stream, int len)
 {
     SMJPEG *movie = (SMJPEG *)udata;
     struct dataring *ring;
+    Uint8 buf[SMJPEG_AUDIO_MAX_CHUNK];
 
     ring = &movie->audio.ring;
-    if ( movie->audio.enabled && ring->used ) {
-        while ( ring->used && (len > 0) ) {
-            if ( ring->ringbuf[ring->read].len <= len ) {
+
+    if ( !movie->audio.enabled )
+        return;
+
+    while ( len > 0 )
+    {
+        if ( ring-> used <= 0 )
+            SDL_Delay(1);
+        else
+        {
+            SDL_mutexP(movie->audio.ring.audio_mutex);
+
+            if ( ring->ringbuf[ring->read].len <= len ) 
+            {
                 memcpy(stream, ring->ringbuf[ring->read].buf,
                                 ring->ringbuf[ring->read].len);
+                len -= ring->ringbuf[ring->read].len;
+                stream = &stream[ring->ringbuf[ring->read].len];
                 ring->read = (ring->read+1)%SMJPEG_AUDIO_BUFFERS;
                 --ring->used;
-                len -= ring->ringbuf[ring->read].len;
-            } else {
+            } 
+            else 
+            {
                 memcpy(stream, ring->ringbuf[ring->read].buf, len);
                 /* WARNING: requires an overlapping memcpy */
                 ring->ringbuf[ring->read].len -= len;
+                stream = &stream[ring->ringbuf[ring->read].len];
                 memcpy(ring->ringbuf[ring->read].buf,
                             &ring->ringbuf[ring->read].buf[len],
                             ring->ringbuf[ring->read].len);
                 len = 0;
             }
+            SDL_mutexV(movie->audio.ring.audio_mutex);
         }
+
     }
 }
