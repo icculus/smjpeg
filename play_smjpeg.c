@@ -101,8 +101,11 @@ int main(int argc, char *argv[])
             spec.callback = SMJPEG_feedaudio;
             spec.userdata = &movie;
 
-            SDL_OpenAudio(&spec, NULL);
-            SDL_PauseAudio(0);
+            if ( SDL_OpenAudio(&spec, NULL) < 0 ) {
+                movie.audio.enabled = 0;
+            } else {
+                SDL_PauseAudio(0);
+            }
         }
         SMJPEG_start(&movie, 1);
         while ( ! movie.at_end ) {
