@@ -1,16 +1,21 @@
 
-0.2.0 -
+0.2.1:
+Sam Lantinga - Thu Feb 17 12:28:26 PST 2000
+ * CHANGES entries are now Y2K compliant ;-)
+ * Added some PPC audio fixes
+
+0.2.0:
 SOL	Fully autoconf'd, updated for SDL 1.0
 SOL	Added -c option to encoder to specify number of audio channels
 SOL	Added -l option to decoder to specify looping playback
-SOL Added SMJPEG_getposition() and SMJPEG_setposition() hacks
+SOL	Added SMJPEG_getposition() and SMJPEG_setposition() hacks
 
-0.1.3 -
+0.1.3:
 SOL	Fixed player hang when the audio device couldn't be opened
 SOL	Fixed color problem when using 16-bit surfaces with RGB 5-5-5
 
-0.1.2 -
+0.1.2:
 SOL	Fixed an audio bug
 
-0.1.1 - First public release
+0.1.1:  First public release
 
