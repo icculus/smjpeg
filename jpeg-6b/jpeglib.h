@@ -212,8 +212,10 @@ typedef enum {
 	JCS_YCCK,		/* Y/Cb/Cr/K */
 	/* Zebaoth-specific extensions: */
 	JCS_RGB16_555,
+	JCS_BGR16_555,
 	JCS_RGB16_565,		/* hicolor modes */
 	JCS_RGB16_555_DBL,
+	JCS_BGR16_555_DBL,
 	JCS_RGB16_565_DBL       /* hicolor with 2x1 pixels */
 } J_COLOR_SPACE;
 

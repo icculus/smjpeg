@@ -185,13 +185,19 @@ exit(0);
       hicolor_g[i] = (i >> 3) << 5;
       hicolor_b[i] = (i >> 3) ;
     }
-
+  else if (cinfo->out_color_space == JCS_BGR16_555 || cinfo->out_color_space == JCS_BGR16_555_DBL)
+    for (i = 0; i < 256; i++) {
+      hicolor_r[i] = (i >> 3) ;
+      hicolor_g[i] = (i >> 3) << 5;
+      hicolor_b[i] = (i >> 3) << 10;
+    }
   else if (cinfo->out_color_space == JCS_RGB16_565 || cinfo->out_color_space == JCS_RGB16_565_DBL)
     for (i = 0; i < 256; i++) {
       hicolor_r[i] = (i >> 3) << 11;
       hicolor_g[i] = (i >> 2) << 5;
       hicolor_b[i] = (i >> 3) ;
     }
+
   /* Optimization - double all pixels for free. :) */
   for (i = 0; i < 256; i++) {
     hicolor_r[i] = (hicolor_r[i]<<16)|hicolor_r[i];
@@ -602,10 +608,12 @@ jinit_merged_upsampler (j_decompress_ptr cinfo)
     /* Zebaoth-specific extension: */
     switch (cinfo->out_color_space) {
       case JCS_RGB16_555:
+      case JCS_BGR16_555:
       case JCS_RGB16_565:
         upsample->upmethod = h2v2_merged_upsample_hicolor;
    	    break;
       case JCS_RGB16_555_DBL:
+      case JCS_BGR16_555_DBL:
       case JCS_RGB16_565_DBL:
         upsample->upmethod = h2v2_merged_upsample_hicolor_dbl;
    	    break;
