@@ -610,11 +610,14 @@ jinit_merged_upsampler (j_decompress_ptr cinfo)
       case JCS_RGB16_555:
       case JCS_BGR16_555:
       case JCS_RGB16_565:
+      case JCS_BGR:
         upsample->upmethod = h2v2_merged_upsample_hicolor;
    	    break;
       case JCS_RGB16_555_DBL:
       case JCS_BGR16_555_DBL:
       case JCS_RGB16_565_DBL:
+      case JCS_RGB_DBL:
+      case JCS_BGR_DBL:
         upsample->upmethod = h2v2_merged_upsample_hicolor_dbl;
    	    break;
       default:

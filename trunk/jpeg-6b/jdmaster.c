@@ -49,7 +49,10 @@ use_merged_upsample (j_decompress_ptr cinfo)
       cinfo->out_color_space == JCS_RGB16_565 ||
       cinfo->out_color_space == JCS_RGB16_555_DBL || 
       cinfo->out_color_space == JCS_BGR16_555_DBL || 
-      cinfo->out_color_space == JCS_RGB16_565_DBL) return TRUE;
+      cinfo->out_color_space == JCS_RGB16_565_DBL ||
+      cinfo->out_color_space == JCS_RGB_DBL ||
+      cinfo->out_color_space == JCS_BGR_DBL ||
+      cinfo->out_color_space == JCS_BGR) return TRUE;
   /* Merging is the equivalent of plain box-filter upsampling */
   if (cinfo->do_fancy_upsampling || cinfo->CCIR601_sampling)
     return FALSE;

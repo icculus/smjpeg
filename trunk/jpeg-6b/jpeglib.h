@@ -206,18 +206,20 @@ struct jpeg_marker_struct {
 typedef enum {
 	JCS_UNKNOWN,		/* error/unspecified */
 	JCS_GRAYSCALE,		/* monochrome */
-	JCS_RGB,		/* red/green/blue */
+	JCS_RGB,		/* red/green/blue 24 bit */
 	JCS_YCbCr,		/* Y/Cb/Cr (also known as YUV) */
 	JCS_CMYK,		/* C/M/Y/K */
 	JCS_YCCK,		/* Y/Cb/Cr/K */
-	/* Zebaoth-specific extensions: */
+	/* Added extensions: */
 	JCS_RGB16_555,
 	JCS_BGR16_555,
 	JCS_RGB16_565,		/* hicolor modes */
 	JCS_RGB16_555_DBL,
 	JCS_BGR16_555_DBL,
 	JCS_RGB16_565_DBL,      /* hicolor with 2x1 pixels */
-        JCS_BGR
+	JCS_BGR,                /* blue/green/red 24 bit */
+	JCS_RGB_DBL,
+	JCS_BGR_DBL
 } J_COLOR_SPACE;
 
 #define JCS_RGB24 JCS_RGB
