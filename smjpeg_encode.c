@@ -274,7 +274,7 @@ int main(int argc, char *argv[])
     fwrite(HEADER_END_MAGIC, 4, 1, output);
 
     /* Multiplex the audio and video data */
-    audio_framesize = DEFAULT_AUDIO_FRAME * (audio_bits / 8);
+    audio_framesize = DEFAULT_AUDIO_FRAME * (audio_bits / 8) * audio_channels;
     audio_time = 0.0;
     video_time = 0.0;
     ms_per_audio_frame = (1000.0 * DEFAULT_AUDIO_FRAME) / audio_rate;
