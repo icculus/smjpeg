@@ -216,8 +216,11 @@ typedef enum {
 	JCS_RGB16_565,		/* hicolor modes */
 	JCS_RGB16_555_DBL,
 	JCS_BGR16_555_DBL,
-	JCS_RGB16_565_DBL       /* hicolor with 2x1 pixels */
+	JCS_RGB16_565_DBL,      /* hicolor with 2x1 pixels */
+        JCS_BGR
 } J_COLOR_SPACE;
+
+#define JCS_RGB24 JCS_RGB
 
 /* DCT/IDCT algorithm options. */
 
