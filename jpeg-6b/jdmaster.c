@@ -188,6 +188,7 @@ jpeg_calc_output_dimensions (j_decompress_ptr cinfo)
     cinfo->out_color_components = 3;
     break;
   case JCS_RGB:
+  case JCS_BGR:
 #if RGB_PIXELSIZE != 3
     cinfo->out_color_components = RGB_PIXELSIZE;
     break;

@@ -1,9 +1,12 @@
 
 0.2.2:
-Joe Tennies - Mon Oct  6 23:25:00 
+Joe Tennies - Mon Oct  9 23:35:00 PDT 2003
+ * Lower requirements by making ParseAudio return BLOCK_SKIPPED
+   This means you aren't refreshing the screen for an audio block
+Joe Tennies - Mon Oct  6 23:25:00 PDT 2003 
  * Fixed issues with mulichannel ADPCM audio decoding
  * Defaulted to transcode filenames for .jpg files
-Joe Tennies - Mon Oct  6 19:25:00 
+Joe Tennies - Mon Oct  6 19:25:00 PDT 2003
  * Fixed quality on multichannel ADPCM audio
 Sam Lantinga - Wed Feb  7 17:15:11 PST 2001
  * Added BGR 555 color support to the JPEG library

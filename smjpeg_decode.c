@@ -8,6 +8,7 @@
 #include "adpcm.h"
 #include "smjpeg_file.h"
 #include "smjpeg_decode.h"
+#include "SDL_opengl.h"
 
 #ifdef __MINGW32__
 #warning mingw32 detected, replacing vsnprintf by vsprintf...
@@ -560,7 +561,7 @@ printf("Waiting for audio queue to empty\n");
     if ( extra ) {
         fseek(movie->src, extra, SEEK_CUR);
     }
-    return(BLOCK_PLAYED);
+    return(BLOCK_SKIPPED);
 }
 
 static int ParseVideo(SMJPEG *movie)
