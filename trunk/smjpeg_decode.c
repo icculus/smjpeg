@@ -534,13 +534,13 @@ printf("Waiting for audio queue to empty\n");
         /* Read the predictor values for this packet */
         for (i = 0; i < movie->audio.channels; i++)
         {
-            READ16(adpcm[movie->audio.channels].valprev, movie->src);
-            READ8(adpcm[movie->audio.channels].index, movie->src);
+            READ16(adpcm[i].valprev, movie->src);
+            READ8(adpcm[i].index, movie->src);
             READ8(unused, movie->src);
         }
 
         /* Read the encoded data */
-        length -= 4;
+        length -= (4 * movie->audio.channels);
         fread(encoded, length, 1, movie->src);
 
         /* Decode and queue the data */
