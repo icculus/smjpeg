@@ -1,5 +1,8 @@
 
 0.2.2:
+Joe Tennies - Mon Oct  6 23:25:00 
+ * Fixed issues with mulichannel ADPCM audio decoding
+ * Defaulted to transcode filenames for .jpg files
 Joe Tennies - Mon Oct  6 19:25:00 
  * Fixed quality on multichannel ADPCM audio
 Sam Lantinga - Wed Feb  7 17:15:11 PST 2001

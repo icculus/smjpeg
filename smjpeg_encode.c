@@ -27,7 +27,7 @@
 #define DEFAULT_VIDEO_ENCODING  VIDEO_ENCODING_JPEG
 #define DEFAULT_VIDEO_FPS       15.0
 
-#define DEFAULT_JPEG_PREFIX    "input/frame"
+#define DEFAULT_JPEG_PREFIX    "frame."
 #define DEFAULT_AUDIO_INPUT    "audio.raw"
 #define DEFAULT_OUTPUT_FILE    "output.mjpg"
 
@@ -207,7 +207,8 @@ int main(int argc, char *argv[])
     /* Count the number of jpeg frames */
     index = 0;
     do {
-        sprintf(jpegfile, "%s%d.jpg", jpegprefix, index++);
+        sprintf(jpegfile, "%s%06d.jpg", jpegprefix, index++);
+        fprintf(stderr, "%s", jpegfile);
     } while ( access(jpegfile, R_OK) == 0 );
 
     /* Double check that we have some frames */
@@ -218,7 +219,7 @@ int main(int argc, char *argv[])
 
     /* Get the width and height of the output movie */
     if ( video_nframes > 0 ) {
-        sprintf(jpegfile, "%s0.jpg", jpegprefix);
+        sprintf(jpegfile, "%s000000.jpg", jpegprefix);
         get_jpeg_dimensions(jpegfile, &video_width, &video_height);
     }
 
@@ -228,6 +229,10 @@ int main(int argc, char *argv[])
     audioinput = fopen(audiofile, "rb");
     if ( audioinput == NULL ) {
         fprintf(stderr, "Warning: no audio stream - video only\n");
+    }
+    else {
+        if (fps_set == 0)
+            video_fps = ((double)(video_nframes)/(((double)audio_left)/(audio_rate*(audio_bits/8)*audio_channels)));
     }
 
     /* Check to make sure we have at least audio or video */
@@ -321,7 +326,7 @@ int main(int argc, char *argv[])
         }
 
         /* Encode the video for this frame */
-        sprintf(jpegfile, "%s%d.jpg", jpegprefix, index);
+        sprintf(jpegfile, "%s%06d.jpg", jpegprefix, index);
         stat(jpegfile, &sb);
         video_framesize = sb.st_size;
         jpeginput = fopen(jpegfile, "rb");
