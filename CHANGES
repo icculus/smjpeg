@@ -1,4 +1,8 @@
 
+0.2.2:
+Sam Lantinga - Tue Apr 11 16:17:03 PDT 2000
+ * Fixed encoding of stereo audio (nobody caught this before? :)
+
 0.2.1:
 Sam Lantinga - Thu Feb 17 12:28:26 PST 2000
  * CHANGES entries are now Y2K compliant ;-)
