@@ -471,7 +471,7 @@ static int ParseAudio(SMJPEG *movie)
 #ifdef DEBUG_TIMING
 printf("Waiting for audio queue to empty\n");
 #endif
-        while ( ring->used == SMJPEG_AUDIO_BUFFERS ) {
+        while ( (ring->used == SMJPEG_AUDIO_BUFFERS) && movie->audio.enabled ) {
             SDL_Delay(10);
         }
     }
@@ -624,7 +624,7 @@ int SMJPEG_advance(SMJPEG *movie, int num_frames, int do_wait)
 void SMJPEG_stop(SMJPEG *movie)
 {
     /* Wait for the audio to get flushed */
-    while ( movie->audio.ring.used > 0 ) {
+    while ( (movie->audio.ring.used > 0) && movie->audio.enabled ) {
         SDL_Delay(10);
     }
     movie->at_end = 1;
