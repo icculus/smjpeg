@@ -1,0 +1,65 @@
+
+			SMJPEG 0.1.1
+
+This is a sample implementation of the SMJPEG Motion JPEG encoding,
+developed by Loki Entertainment Software, and released as open source
+under the GNU Library General Public License.
+
+-----------------------
+
+Why Motion JPEG instead of MPEG?
+
+There are times when you'll want to use MPEG over MJPEG, but MJPEG is
+a good alternative to MPEG for software decoding of full-motion video.
+MJPEG is especially good in situations where you want arbitrary
+frame-rates or video sizes, and quality is not as important a factor.
+
+Advantages of SMJPEG:
+* Arbitrary video sizes (not limited to blocks of 16 pixels)
+* Arbitrary frame-rate
+* User-tuneable compression level
+* Much easier to skip a frame
+* Much easier to keep timesync
+* Easy to seek within the video stream
+* Free of patent problems
+
+Disadvantages of SMJPEG
+* Not a standard format
+* Poorer quality than MPEG at the same file size
+* Slightly slower than MPEG at the same framerate
+* Not designed for Internet streaming
+
+The SMJPEG file format is documented in the file SMJPEG.txt
+
+-----------------------
+
+The encoder and decoder can be built by typing 'make'
+Currently many encoding parameters are hard-coded into smjpeg_encode.
+See the source file for more information on configurable parameters.
+
+The decoder makes use of the cross-platform multi-media library
+Simple DirectMedia Layer, which is available under the LGPL at:
+	http://www.devolution.com/~slouken/SDL/
+
+Example usage:
+1.  Place a raw 16-bit mono audio file called "audio.raw" in the current
+    working directory.
+2.  Create a directory named "input", and place the color JPEG frames of
+    your animation in that subdirectory, each named frameN.jpg, where N
+    is the index of that frame, starting at 0.
+3.  Run "smjpeg_encode" to create the output motion jpeg file "output.mjpg"
+    If you want to use a video rate other than the default one (15 fps)
+    use the -r command line option.
+4.  Run "smjpeg_decode output.mjpg" to play the output file.
+
+I use a modified version of xanim which can export animations that it
+plays as raw 16-bit audio and PPM or JPEG frames.  This modified version
+of xanim can be downloaded from the Loki open source tools page at:
+http://www.lokigames.com/
+
+Enjoy!
+Please send feedback to smjpeg@lokigames.com
+
+August 11, 1999
+Sam Lantinga, Lead Programmer, Loki Entertainment Software
+
