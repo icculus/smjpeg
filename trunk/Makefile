@@ -10,7 +10,11 @@ CFLAGS += -D_SDL_STATIC_LIB
 endif
 
 LIBRARIES = $(JPEGDIR)/libjpeg.a $(ADPCMDIR)/libadpcm.a
-SDLLIB = -lSDL -ldl -lpthread
+ifeq ($(static), true)
+SDLLIB = -lSDL-static -ldl -lpthread -lesd -L/usr/X11R6/lib -lX11 -lXext -lXxf86dga -lXxf86vm
+else
+SDLLIB = -lSDL -ldl -lpthread -lesd
+endif
 
 all: smjpeg_encode smjpeg_decode libsmjpeg.a
 
