@@ -1,5 +1,7 @@
 
 0.2.2:
+Sam Lantinga - Wed Feb  7 17:15:11 PST 2001
+ * Added BGR 555 color support to the JPEG library
 Sam Lantinga - Wed Aug  9 23:30:39 PDT 2000
  * The library now almost cross-compiles as a Windows DLL
 Mathias Hasselmann - Sat, 22 Apr 2000 23:30:35 +0200

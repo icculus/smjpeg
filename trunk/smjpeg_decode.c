@@ -276,6 +276,15 @@ int SMJPEG_target(SMJPEG *movie,
                 } else {
                     movie->jpeg_colorspace = JCS_RGB16_555;
                 }
+            } else
+            if ( (target->format->Rmask == 0x001F) &&
+                 (target->format->Gmask == 0x03E0) &&
+                 (target->format->Bmask == 0x7C00) ) {
+                if ( movie->video.doubled ) {
+                    movie->jpeg_colorspace = JCS_BGR16_555_DBL;
+                } else {
+                    movie->jpeg_colorspace = JCS_BGR16_555;
+                }
             } else {
                 if ( movie->video.doubled ) {
                     movie->jpeg_colorspace = JCS_RGB16_565_DBL;
