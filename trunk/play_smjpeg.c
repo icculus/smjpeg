@@ -15,8 +15,12 @@
 
 void Usage(const char *argv0)
 {
-    printf("SMJPEG " VERSION " decoder, Loki Entertainment Software\n");
-    printf("Usage: %s [-2] [-l] file.mjpg [file.mjpg ...]\n", argv0);
+    printf("SMJPEG " VERSION " decoder, Loki Entertainment Software and Fat N Soft\n");
+    printf("Usage: %s [-2] [-l] [-f] [-v] file.mjpg [file.mjpg ...]\n", argv0);
+    printf("-2 is double size video.\n");
+    printf("-l is loop video playback.\n");
+    printf("-f is fullscreen playback.\n");
+    printf("-v displays version.\n");
 }
 
 int main(int argc, char *argv[])
@@ -25,6 +29,7 @@ int main(int argc, char *argv[])
     int i;
     int doubleflag;
     int loopflag;
+    int fullflag;
 
     if ( SDL_Init(SDL_INIT_AUDIO|SDL_INIT_VIDEO) < 0 ) {
         fprintf(stderr, "Couldn't init SDL: %s\n", SDL_GetError());
@@ -34,6 +39,7 @@ int main(int argc, char *argv[])
 
     doubleflag = 0;
     loopflag = 0;
+    fullflag = 0;
     for ( i=1; argv[i]; ++i ) {
         if ( (strcmp(argv[i], "-h") == 0) ||
              (strcmp(argv[i], "--help") == 0) ) {
@@ -46,6 +52,14 @@ int main(int argc, char *argv[])
         }
         if ( strcmp(argv[i], "-l") == 0 ) {
             loopflag = !loopflag;
+            continue;
+        }
+        if ( strcmp(argv[i], "-f") == 0 ) {
+            fullflag = SDL_FULLSCREEN;
+            continue;
+        }
+        if ( strcmp(argv[i], "-v") == 0 ) {
+            printf("SMJPEG " VERSION " decoder, Loki Entertainment Software and Fat N Soft\n");
             continue;
         }
 
@@ -76,7 +90,7 @@ int main(int argc, char *argv[])
                 width *= 2;
                 height *= 2;
             }
-            screen = SDL_SetVideoMode(width, height, 16, SDL_SWSURFACE);
+            screen = SDL_SetVideoMode(width, height, 16, SDL_SWSURFACE|fullflag);
             if ( screen == NULL ) {
                 fprintf(stderr, "Couldn't set %dx%d 16-bit video mode: %s\n",
                                                             SDL_GetError());
