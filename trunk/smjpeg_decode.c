@@ -698,7 +698,10 @@ void SMJPEG_feedaudio(void *udata, Uint8 *stream, int len)
     while ( len > 0 )
     {
         if ( ring-> used <= 0 )
-            SDL_Delay(1);
+            if ( END_OF_STREAM(movie, "") )
+               return;
+            else
+                SDL_Delay(1);
         else
         {
             SDL_mutexP(movie->audio.ring.audio_mutex);
