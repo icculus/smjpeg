@@ -1,4 +1,10 @@
 
+0.2.0 -
+SOL	Fully autoconf'd
+SOL	Added -c option to encoder to specify number of audio channels
+SOL	Added -l option to decoder to specify looping playback
+SOL Added SMJPEG_getposition() and SMJPEG_setposition() hacks
+
 0.1.3 -
 SOL	Fixed player hang when the audio device couldn't be opened
 SOL	Fixed color problem when using 16-bit surfaces with RGB 5-5-5

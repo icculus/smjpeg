@@ -16,7 +16,7 @@
 void Usage(const char *argv0)
 {
     printf("SMJPEG 0.1 decoder, Loki Entertainment Software\n");
-    printf("Usage: %s [-2] file.mjpg [file.mjpg ...]\n", argv0);
+    printf("Usage: %s [-2] [-l] file.mjpg [file.mjpg ...]\n", argv0);
 }
 
 int main(int argc, char *argv[])
@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
     SMJPEG movie;
     int i;
     int doubleflag;
+    int loopflag;
 
     if ( SDL_Init(SDL_INIT_AUDIO|SDL_INIT_VIDEO) < 0 ) {
         fprintf(stderr, "Couldn't init SDL: %s\n", SDL_GetError());
@@ -32,6 +33,7 @@ int main(int argc, char *argv[])
     atexit(SDL_Quit);
 
     doubleflag = 0;
+    loopflag = 0;
     for ( i=1; argv[i]; ++i ) {
         if ( (strcmp(argv[i], "-h") == 0) ||
              (strcmp(argv[i], "--help") == 0) ) {
@@ -40,6 +42,10 @@ int main(int argc, char *argv[])
         }
         if ( strcmp(argv[i], "-2") == 0 ) {
             doubleflag = !doubleflag;
+            continue;
+        }
+        if ( strcmp(argv[i], "-l") == 0 ) {
+            loopflag = !loopflag;
             continue;
         }
 
@@ -107,22 +113,29 @@ int main(int argc, char *argv[])
                 SDL_PauseAudio(0);
             }
         }
-        SMJPEG_start(&movie, 1);
-        while ( ! movie.at_end ) {
-            SDL_Event event;
+        do {
+            SMJPEG_start(&movie, 1);
+            while ( ! movie.at_end ) {
+                SDL_Event event;
 
-            SMJPEG_advance(&movie, 1, 1);
+                SMJPEG_advance(&movie, 1, 1);
 
-            if ( SDL_PollEvent(&event) ) {
-                switch(event.type) {
-                    case SDL_KEYDOWN:
-                    case SDL_QUIT:
-                        SMJPEG_stop(&movie);
-                        break;
+                if ( SDL_PollEvent(&event) ) {
+                    switch(event.type) {
+                        case SDL_KEYDOWN:
+                        case SDL_QUIT:
+                            loopflag = 0;
+                            SMJPEG_stop(&movie);
+                            break;
+                    }
                 }
             }
-        }
-        SMJPEG_stop(&movie);
+            SMJPEG_stop(&movie);
+
+            if ( loopflag ) {
+                SMJPEG_rewind(&movie);
+            }
+        } while ( loopflag );
 
         if ( movie.audio.enabled ) {
             SDL_CloseAudio();
