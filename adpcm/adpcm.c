@@ -44,6 +44,20 @@ OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ** - Changed some of the variable names to be more meaningful.
 */
 
+/***********************************************************
+**
+** Modifications by Fat N Soft (http://fatnsoft.com)
+**
+*************************************************************
+**
+**
+** Change log:
+** 06 Oct 2003
+** - Modified to have a separate adpcm state for each channel.
+**   This improves quality on multichannel audio.
+**/
+
+
 #include "adpcm.h"
 #include <stdio.h> /*DBG*/
 
@@ -70,11 +84,12 @@ static int stepsizeTable[89] = {
 };
     
 void
-adpcm_coder(indata, outdata, len, state)
+SMJPEG_adpcm_coder(indata, outdata, len, channels, state)
     short indata[];
     char outdata[];
     int len;
-    struct adpcm_state *state;
+    char channels;
+    struct adpcm_state state[];
 {
     short *inp;			/* Input buffer pointer */
     signed char *outp;		/* output buffer pointer */
@@ -88,17 +103,18 @@ adpcm_coder(indata, outdata, len, state)
     int index;			/* Current step change index */
     int outputbuffer;		/* place to keep previous 4-bit value */
     int bufferstep;		/* toggle between outputbuffer/output */
+    int converted;              /* number of samples converted */
 
     outp = (signed char *)outdata;
     inp = indata;
 
-    valpred = state->valprev;
-    index = state->index;
-    step = stepsizeTable[index];
-    
     bufferstep = 1;
 
-    for ( ; len > 0 ; len-- ) {
+    for ( converted = 0; len > converted ; converted ++ ) 
+    {
+        valpred = state[converted % channels].valprev;
+        index = state[converted % channels].index;
+        step = stepsizeTable[index];
 	val = *inp++;
 
 	/* Step 1 - compute difference with previous value */
@@ -162,22 +178,24 @@ adpcm_coder(indata, outdata, len, state)
 	    *outp++ = (delta & 0x0f) | outputbuffer;
 	}
 	bufferstep = !bufferstep;
+
+        state[converted % channels].valprev = valpred;
+        state[converted % channels].index = index;
     }
 
     /* Output last step, if needed */
     if ( !bufferstep )
       *outp++ = outputbuffer;
     
-    state->valprev = valpred;
-    state->index = index;
 }
 
 void
-adpcm_decoder(indata, outdata, len, state)
+SMJPEG_adpcm_decoder(indata, outdata, len, channels, state)
     char indata[];
     short outdata[];
     int len;
-    struct adpcm_state *state;
+    char channels;
+    struct adpcm_state state[];
 {
     signed char *inp;		/* Input buffer pointer */
     short *outp;		/* output buffer pointer */
@@ -189,18 +207,20 @@ adpcm_decoder(indata, outdata, len, state)
     int index;			/* Current step change index */
     int inputbuffer;		/* place to keep next 4-bit value */
     int bufferstep;		/* toggle between inputbuffer/input */
+    int converted;              /* number of samples converted */
 
     outp = outdata;
     inp = (signed char *)indata;
 
-    valpred = state->valprev;
-    index = state->index;
-    step = stepsizeTable[index];
-
     bufferstep = 0;
     
-    for ( ; len > 0 ; len-- ) {
+    for ( converted = 0 ; len > converted ; converted ++ ) 
+    {
 	
+        valpred = state[converted % channels].valprev;
+        index = state[converted % channels].index;
+        step = stepsizeTable[index];
+
 	/* Step 1 - get the delta value */
 	if ( bufferstep ) {
 	    delta = inputbuffer & 0xf;
@@ -245,8 +265,9 @@ adpcm_decoder(indata, outdata, len, state)
 
 	/* Step 7 - Output value */
 	*outp++ = valpred;
+
+        state[converted % channels].valprev = valpred;
+        state[converted % channels].index = index;
     }
 
-    state->valprev = valpred;
-    state->index = index;
 }

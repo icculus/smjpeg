@@ -524,15 +524,20 @@ printf("Waiting for audio queue to empty\n");
         extra = 0;
     }
     /* Handle ADPCM compressed audio data */
-    if ( MAGIC_EQUALS(movie->audio.encoding, AUDIO_ENCODING_ADPCM) ) {
-        struct adpcm_state adpcm;
+    if ( MAGIC_EQUALS(movie->audio.encoding, AUDIO_ENCODING_ADPCM) ) 
+    {
+        struct adpcm_state adpcm[movie->audio.channels];
         Uint8 unused;
         Uint8 encoded[SMJPEG_AUDIO_MAX_CHUNK];
+        int i;
 
         /* Read the predictor values for this packet */
-        READ16(adpcm.valprev, movie->src);
-        READ8(adpcm.index, movie->src);
-        READ8(unused, movie->src);
+        for (i = 0; i < movie->audio.channels; i++)
+        {
+            READ16(adpcm[movie->audio.channels].valprev, movie->src);
+            READ8(adpcm[movie->audio.channels].index, movie->src);
+            READ8(unused, movie->src);
+        }
 
         /* Read the encoded data */
         length -= 4;
@@ -541,8 +546,8 @@ printf("Waiting for audio queue to empty\n");
         /* Decode and queue the data */
         length *= 4;
         ring->ringbuf[ring->write].len = length;
-        adpcm_decoder(encoded, (short *)ring->ringbuf[ring->write].buf,
-                                       length/2, &adpcm);
+        SMJPEG_adpcm_decoder(encoded, (short *)ring->ringbuf[ring->write].buf,
+                                       length/2, movie->audio.channels, &adpcm);
     } else {
         /* Just read the data into the queue */
         ring->ringbuf[ring->write].len = length;

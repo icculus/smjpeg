@@ -61,22 +61,26 @@ int get_jpeg_dimensions(const char *file, Uint16 *w, Uint16 *h)
     return(status);
 }
 
-static struct adpcm_state adpcm;
-
 int WriteAudioChunk(FILE *input, double timestamp, Uint32 size,
-                             const char *encoding, FILE *output)
+                             const char *encoding, FILE *output, Uint8 channels, void* data)
 {
     Uint8 buffer[BUFSIZ];
     int len;
+    int i;
 
 //fprintf(stderr, "A");
     fwrite(AUDIO_DATA_MAGIC, 4, 1, output);
     WRITE32((Uint32)timestamp, output);
-    if ( MAGIC_EQUALS(encoding, AUDIO_ENCODING_ADPCM) ) {
-        WRITE32(4+(size/4), output);
-        WRITE16(adpcm.valprev, output);
-        WRITE8(adpcm.index, output);
-        WRITE8(0, output);
+    if ( MAGIC_EQUALS(encoding, AUDIO_ENCODING_ADPCM) ) 
+    {
+	struct adpcm_state *state = (struct adpcm_state*) data;
+        WRITE32((channels*4)+(size/4), output);
+        for (i = 0; i < channels; i++)
+        {
+            WRITE16(state[i].valprev, output);
+            WRITE8(state[i].index, output);
+            WRITE8(0, output);
+        }
     } else {
         WRITE32(size, output);
     }
@@ -96,7 +100,7 @@ int WriteAudioChunk(FILE *input, double timestamp, Uint32 size,
         if ( MAGIC_EQUALS(encoding, AUDIO_ENCODING_ADPCM) ) {
             Uint8 encoded[BUFSIZ];
 
-            adpcm_coder((short *)buffer, encoded, len/2, &adpcm);
+            SMJPEG_adpcm_coder((short *)buffer, encoded, len/2, channels, (struct adpcm_state*) data);
             fwrite(encoded, len/4, 1, output);
         } else {
             fwrite(buffer, len, 1, output);
@@ -135,7 +139,7 @@ int WriteVideoChunk(FILE *input, double timestamp, Uint32 size,
 
 void Usage(const char *argv0)
 {
-    printf("SMJPEG 0.1 encoder, Loki Entertainment Software\n");
+    printf("SMJPEG 0.2.2 encoder, Loki Entertainment Software and Fat N Soft\n");
     printf("Usage: %s [-r fps] [-c channels]\n", argv0);
 }
 
@@ -164,6 +168,8 @@ int main(int argc, char *argv[])
     double ms_per_video_frame;
     double audio_time, video_time;
     int status;
+    int fps_set;
+    void *audio_data;
 
     /* First, set default encoding parameters */
     audio_rate = DEFAULT_AUDIO_RATE;
@@ -178,6 +184,7 @@ int main(int argc, char *argv[])
     strcpy(jpegprefix, DEFAULT_JPEG_PREFIX);
     strcpy(audiofile, DEFAULT_AUDIO_INPUT);
     strcpy(outputfile, DEFAULT_OUTPUT_FILE);
+    fps_set = 0;
 
     /* Process command-line options */
     for ( index=1; argv[index]; ++index ) {
@@ -188,7 +195,8 @@ int main(int argc, char *argv[])
         }
         if ( (strcmp(argv[index], "-r") == 0) && argv[index+1] ) {
             ++index;
-            video_fps = atoi(argv[index]);
+            video_fps = atof(argv[index]);
+            fps_set = 1;
         }
         if ( (strcmp(argv[index], "-c") == 0) && argv[index+1] ) {
             ++index;
@@ -273,6 +281,22 @@ int main(int argc, char *argv[])
     /* Write the end of header marker */
     fwrite(HEADER_END_MAGIC, 4, 1, output);
 
+    /* Create audio data for encoder */
+    if (MAGIC_EQUALS(audio_encoding, AUDIO_ENCODING_ADPCM))
+    {
+        audio_data = malloc(sizeof(struct adpcm_state) * audio_channels);
+        if (audio_data == NULL)
+        {
+            fprintf(stderr, "Out of memory\n");
+            exit(2);
+        }
+        memset(audio_data, 0, sizeof(struct adpcm_state) * audio_channels);
+    }
+    else
+    {
+        audio_data = NULL;
+    }
+
     /* Multiplex the audio and video data */
     audio_framesize = DEFAULT_AUDIO_FRAME * (audio_bits / 8) * audio_channels;
     audio_time = 0.0;
@@ -288,7 +312,8 @@ int main(int argc, char *argv[])
                 audio_framesize = audio_left;
             }
             WriteAudioChunk(audioinput, audio_time, audio_framesize,
-                                            audio_encoding, output);
+                            audio_encoding, output, audio_channels,
+                            audio_data);
             audio_left -= audio_framesize;
             audio_time += ms_per_audio_frame;
 
@@ -319,7 +344,8 @@ int main(int argc, char *argv[])
             audio_framesize = audio_left;
         }
         WriteAudioChunk(audioinput, audio_time, audio_framesize,
-                                        audio_encoding, output);
+                        audio_encoding, output, audio_channels,
+                        audio_data);
         audio_left -= audio_framesize;
         audio_time += ms_per_audio_frame;
 
