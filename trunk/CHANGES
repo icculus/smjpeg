@@ -1,5 +1,7 @@
 
 0.2.2:
+Joe Tennies - Mon Oct  6 19:25:00 
+ * Fixed quality on multichannel ADPCM audio
 Sam Lantinga - Wed Feb  7 17:15:11 PST 2001
  * Added BGR 555 color support to the JPEG library
 Sam Lantinga - Wed Aug  9 23:30:39 PDT 2000

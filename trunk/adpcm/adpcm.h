@@ -1,7 +1,7 @@
 /*
 ** adpcm.h - include file for adpcm coder.
 **
-** Version 1.0, 7-Jul-92.
+** Version 1.1, 06 Oct 2003.
 */
 
 struct adpcm_state {
@@ -15,5 +15,5 @@ struct adpcm_state {
 #define ARGS(x) ()
 #endif
 
-void adpcm_coder ARGS((short [], char [], int, struct adpcm_state *));
-void adpcm_decoder ARGS((char [], short [], int, struct adpcm_state *));
+void SMJPEG_adpcm_coder ARGS((short indata[], char outdata[], int len , char channels, struct adpcm_state state[]));
+void SMJPEG_adpcm_decoder ARGS((char indata[], short outdata[], int len, char channels, struct adpcm_state state[]));
