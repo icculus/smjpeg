@@ -9,6 +9,11 @@
 #include "smjpeg_file.h"
 #include "smjpeg_decode.h"
 
+#ifdef __MINGW32__
+#warning mingw32 detected, replacing vsnprintf by vsprintf...
+#define vsnprintf(BUF,SIZE,FMT...)	vsprintf (BUF, FMT)
+#endif
+
 /* Only define this when analyzing the performance on slow systems */
 /*#define DEBUG_TIMING*/
 
@@ -147,7 +152,7 @@ int SMJPEG_load(SMJPEG *movie, const char *file)
     memset(movie, 0, (sizeof *movie));
 
     /* Open the SMJPEG file */
-    movie->src = fopen(file, "r");
+    movie->src = fopen(file, "rb");
     if ( movie->src == NULL ) {
         SMJPEG_status(movie,-1, "Couldn't open %s: %s", file, strerror(errno));
         goto error_return;

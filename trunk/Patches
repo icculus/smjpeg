@@ -1,0 +1,54 @@
+*************************************************************************
+*** Applied ***
+Date: Sat, 22 Apr 2000 23:30:35 +0200
+From: Mathias Hasselmann <Mathias.Hasselmann@gmx.de>
+Subject: MinGW32 - it works!
+
+
+First, thanks for smjpeg - it saved me a lot of time...
+
+...and after forcing the library to operate on files
+in binary mode I've got a binary compatible version for
+Linux (RedHat 6.1) and MinGW32...
+
+Ciao,
+Mathias
+-- 
+WWW: http://www.arco.de/~mhasselm/ http://www.dominanz-haus.de/
+PGP-Fingerprint: 4D15 89ED 7299 6428 FEE6  C66F 5D40 6504 55E5 72F3
+
+Only in smjpeg-0.2.1.mingw32/: MinGW32
+diff -rU1 smjpeg-0.2.1/smjpeg_decode.c smjpeg-0.2.1.mingw32/smjpeg_decode.c
+--- smjpeg-0.2.1/smjpeg_decode.c	Tue Nov 23 21:25:33 1999
++++ smjpeg-0.2.1.mingw32/smjpeg_decode.c	Sat Apr 22 23:06:49 2000
+@@ -11,2 +11,7 @@
+ 
++#ifdef __MINGW32__
++#warning mingw32 detected, replacing vsnprintf by vsprintf...
++#define vsnprintf(BUF,SIZE,FMT...)	vsprintf (BUF, FMT)
++#endif
++
+ /* Only define this when analyzing the performance on slow systems */
+@@ -149,3 +154,3 @@
+     /* Open the SMJPEG file */
+-    movie->src = fopen(file, "r");
++    movie->src = fopen(file, "rb");
+     if ( movie->src == NULL ) {
+diff -rU1 smjpeg-0.2.1/smjpeg_encode.c smjpeg-0.2.1.mingw32/smjpeg_encode.c
+--- smjpeg-0.2.1/smjpeg_encode.c	Tue Nov 23 21:25:33 1999
++++ smjpeg-0.2.1.mingw32/smjpeg_encode.c	Sat Apr 22 23:09:03 2000
+@@ -44,3 +44,3 @@
+     status = -1;
+-    input = fopen(file, "r");
++    input = fopen(file, "rb");
+     if ( input ) {
+@@ -219,3 +219,3 @@
+     audio_left = sb.st_size;
+-    audioinput = fopen(audiofile, "r");
++    audioinput = fopen(audiofile, "rb");
+     if ( audioinput == NULL ) {
+@@ -231,3 +231,3 @@
+     /* Open the output file */
+-    output = fopen(outputfile, "w");
++    output = fopen(outputfile, "wb");
+     if ( output == NULL ) {
