@@ -619,7 +619,7 @@ static int ParseBlock(SMJPEG *movie, int do_wait, Uint32 timestamp)
             if ( timenow < min_timestamp ) {
                 if ( do_wait ) {
                     int timediff = min_timestamp - (SDL_GetTicks() - movie->start);
-                    if ( timediff > TIMESLICE && timediff < 1000 ) {
+                    if ( timediff > TIMESLICE && timediff < 10000 ) {
                         timediff -= TIMESLICE;
 #ifdef DEBUG_TIMING
 printf("Sleeping for %d milliseconds\n", timediff);
