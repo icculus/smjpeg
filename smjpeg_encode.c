@@ -139,7 +139,7 @@ int WriteVideoChunk(FILE *input, double timestamp, Uint32 size,
 
 void Usage(const char *argv0)
 {
-    printf("SMJPEG 0.2.2 encoder, Loki Entertainment Software and Fat N Soft\n");
+    printf("SMJPEG " VERSION " encoder, Loki Entertainment Software and Fat N Soft\n");
     printf("Usage: %s [-r fps] [-c channels]\n", argv0);
 }
 
