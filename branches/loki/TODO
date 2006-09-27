@@ -1,6 +1,0 @@
-
-- Support other output formats besides 16-bit RGB
-
-- Implement motion jpeg optimizations in the JPEG library (or export
-  the color conversion and scanline merging functions)
-
